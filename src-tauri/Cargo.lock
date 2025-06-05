@@ -3752,7 +3752,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tetrav-sales-tracker-desktop"
+name = "tetrav-sales-traker-desktop"
 version = "0.1.0"
 dependencies = [
  "serde",
