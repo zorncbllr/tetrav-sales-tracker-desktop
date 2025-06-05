@@ -1,24 +1,14 @@
-import { Button } from "./components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardTitle,
-} from "./components/ui/card";
+import { Route, Routes } from "react-router";
+import SignIn from "./features/auth/pages/SignIn";
+import Dashboard from "./features/dashboard/Dashboard";
 
 function App() {
   return (
-    <div className="flex justify-center items-center w-full h-screen">
-      <Card>
-        <CardContent>
-          <CardTitle>Hello Tauri App</CardTitle>
-          <CardDescription>Lorem tauri description setup.</CardDescription>
-        </CardContent>
-        <CardFooter>
-          <Button>Get Started</Button>
-        </CardFooter>
-      </Card>
+    <div className="w-full h-screen dark bg-primary-foreground text-secondary-foreground">
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/auth/sign-in" element={<SignIn />} />
+      </Routes>
     </div>
   );
 }
