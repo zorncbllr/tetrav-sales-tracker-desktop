@@ -5,7 +5,7 @@ import { FuelIcon } from "lucide-react";
 function SignIn() {
   return (
     <div className="h-full flex justify-center items-center relative">
-      <div className="absolute flex gap-4 items-center top-8 left-8">
+      <div className="absolute hidden md:flex gap-4 items-center top-8 left-8">
         <Button>
           <FuelIcon />
         </Button>
