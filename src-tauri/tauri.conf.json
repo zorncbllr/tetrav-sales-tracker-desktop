@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "tetrav-sales-traker-desktop",
+  "productName": "tetrav-sales-tracker-desktop",
   "version": "0.1.0",
-  "identifier": "com.tetrav-sales-traker-desktop.app",
+  "identifier": "com.tetrav-sales-tracker-desktop.app",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "tetrav-sales-traker-desktop",
+        "title": "tetrav-sales-tracker-desktop",
         "width": 800,
         "height": 600
       }
