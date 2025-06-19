@@ -5,6 +5,7 @@ use tauri::Manager;
 
 use crate::database::Database;
 
+mod auth;
 mod database;
 
 #[tauri::command]
