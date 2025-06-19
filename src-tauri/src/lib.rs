@@ -20,6 +20,11 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             let database = Database::new().expect("Failed to connect to database");
+
+            database
+                .initialize()
+                .expect("Failed to initialize database.");
+
             app.manage(database);
             Ok(())
         })
