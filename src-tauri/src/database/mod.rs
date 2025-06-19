@@ -18,7 +18,7 @@ impl Database {
     pub fn initialize(&self) -> Result<()> {
         let conn = self.connection.lock().unwrap();
 
-        let migration_string = fs::read_to_string("src/database/migrations.sql").unwrap();
+        let migration_string = fs::read_to_string("src/database/migrations/up.sql").unwrap();
 
         conn.execute_batch(format!("BEGIN; \n{}\n COMMIT;", migration_string).as_str())?;
 
