@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#
+src-tauri/data/tetrav_station.db
+src-tauri/.env
