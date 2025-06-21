@@ -3,7 +3,9 @@ use tauri::State;
 use crate::{auth::model::User, database::Database};
 
 #[tauri::command]
-pub fn attemp_login(database: State<Database>, username: String, password: String) {}
+pub fn attemp_login(database: State<Database>, username: String, password: String) {
+    let conn = database.connection.lock().unwrap();
+}
 
 #[tauri::command]
 pub fn logout(database: State<Database>) {}

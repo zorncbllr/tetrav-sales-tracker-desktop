@@ -7,6 +7,7 @@ use crate::database::Database;
 
 mod auth;
 mod database;
+mod users;
 
 #[tauri::command]
 fn greet(name: &str) -> String {

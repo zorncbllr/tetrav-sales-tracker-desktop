@@ -2,7 +2,7 @@ use rusqlite::{Connection, Result};
 use std::{env, fs, sync::Mutex};
 
 pub struct Database {
-    connection: Mutex<Connection>,
+    pub connection: Mutex<Connection>,
 }
 
 impl Database {
