@@ -27,12 +27,16 @@ function LoginForm() {
   });
 
   const onSubmit = async (data: LoginData) => {
-    let res = await invoke("attempt_login", {
-      username: data.username,
-      password: data.password,
-    });
+    try {
+      let res = await invoke("attempt_login", {
+        username: data.username,
+        password: data.password,
+      });
 
-    console.log(res);
+      console.log(res);
+    } catch (error) {
+      console.log(`error: ${error}`);
+    }
   };
 
   return (
