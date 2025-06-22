@@ -1,6 +1,6 @@
 use rusqlite::{params, Result};
 
-use crate::database::Database;
+use crate::{database::Database, users::model::User};
 
 pub struct UserRepository<'a> {
     database: &'a Database,
@@ -9,6 +9,25 @@ pub struct UserRepository<'a> {
 impl<'a> UserRepository<'a> {
     pub fn new(database: &'a Database) -> UserRepository<'a> {
         UserRepository { database }
+    }
+
+    pub fn get_user_by_username(&self, username: &str) -> Result<User> {
+        let conn = self.database.connection.lock().unwrap();
+
+        conn.query_row(
+            "SELECT * FROM users WHERE username = ?1",
+            [username],
+            |row| {
+                Ok(User {
+                    user_id: row.get(0)?,
+                    name: row.get(1)?,
+                    username: row.get(2)?,
+                    email: row.get(3)?,
+                    password: row.get(4)?,
+                    created_at: row.get(5)?,
+                })
+            },
+        )
     }
 
     pub fn create_user(
@@ -22,7 +41,7 @@ impl<'a> UserRepository<'a> {
 
         conn.execute(
             "INSERT INTO users (name, email, username, password) VALUES (?, ?, ?, ?)",
-            [name, email, username, password],
+            params![name, email, username, password],
         )?;
 
         Ok(())

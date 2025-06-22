@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginData, loginSchema } from "../types";
 import { useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -25,8 +26,13 @@ function LoginForm() {
     },
   });
 
-  const onSubmit = (data: LoginData) => {
-    console.log(data);
+  const onSubmit = async (data: LoginData) => {
+    let res = await invoke("attempt_login", {
+      username: data.username,
+      password: data.password,
+    });
+
+    console.log(res);
   };
 
   return (

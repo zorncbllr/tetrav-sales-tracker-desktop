@@ -1,17 +1,14 @@
 use tauri::State;
 
-use crate::database::Database;
+use crate::{auth::service::AuthService, database::Database};
 
 #[tauri::command]
-pub fn attemp_login(database: State<Database>, username: String, password: String) {
-    let conn = database.connection.lock().unwrap();
+pub fn attempt_login(database: State<Database>, username: String, password: String) -> String {
+    let auth_service = AuthService::new(&database);
+
+    auth_service
+        .attempt_login(username, password)
+        .unwrap_or_else(|e| {
+            return e;
+        })
 }
-
-#[tauri::command]
-pub fn logout(database: State<Database>) {}
-
-#[tauri::command]
-pub fn change_password(database: State<Database>) {}
-
-#[tauri::command]
-pub fn register(database: State<Database>) {}

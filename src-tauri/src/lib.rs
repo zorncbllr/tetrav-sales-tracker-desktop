@@ -9,6 +9,8 @@ mod auth;
 mod database;
 mod users;
 
+use auth::auth_commands;
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -30,7 +32,10 @@ pub fn run() {
             app.manage(database);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            auth_commands::attempt_login
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

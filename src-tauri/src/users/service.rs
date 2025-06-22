@@ -1,7 +1,10 @@
 use bcrypt::{hash, DEFAULT_COST};
 use rusqlite::Result;
 
-use crate::{database::Database, users::repository::UserRepository};
+use crate::{
+    database::Database,
+    users::{model::User, repository::UserRepository},
+};
 
 #[allow(dead_code)]
 pub struct UserService<'a> {
@@ -15,6 +18,10 @@ impl<'a> UserService<'a> {
             database: database,
             user_repository: UserRepository::new(database),
         }
+    }
+
+    pub fn get_user_by_username(&self, username: &str) -> Result<User> {
+        self.user_repository.get_user_by_username(username)
     }
 
     pub fn create_user(
