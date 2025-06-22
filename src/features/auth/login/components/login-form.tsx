@@ -13,9 +13,11 @@ import {
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginData, loginSchema } from "../types";
+import { LoginData, LoginResponse, loginSchema } from "../../types";
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -26,14 +28,19 @@ function LoginForm() {
     },
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data: LoginData) => {
     try {
-      let res = await invoke("attempt_login", {
-        username: data.username,
-        password: data.password,
-      });
+      let response = (await invoke("attempt_login", {
+        credentials: {
+          username: data.username,
+          password: data.password,
+        },
+      })) as LoginResponse;
 
-      console.log(res);
+      Cookies.set("auth_token", response.token, { expires: 1 });
+      navigate("/");
     } catch (error) {
       console.log(`error: ${error}`);
     }

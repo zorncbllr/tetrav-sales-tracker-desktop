@@ -1,16 +1,20 @@
 use tauri::State;
 
-use crate::{auth::service::AuthService, database::Database};
+use crate::{
+    auth::{
+        models::{AuthResponse, LoginRequest},
+        service::AuthService,
+    },
+    database::Database,
+};
 
 #[tauri::command]
 pub fn attempt_login(
     database: State<Database>,
-    username: String,
-    password: String,
-) -> Result<String, String> {
-    let auth_service = AuthService::new(&database);
+    credentials: LoginRequest,
+) -> Result<AuthResponse, String> {
+    let auth_response =
+        AuthService::new(&database).attempt_login(credentials.username, credentials.password)?;
 
-    let msg = auth_service.attempt_login(username, password)?;
-
-    Ok(msg)
+    Ok(auth_response)
 }

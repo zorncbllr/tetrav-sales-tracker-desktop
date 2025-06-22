@@ -1,5 +1,5 @@
 import { FuelIcon } from "lucide-react";
-import LoginForm from "../components/login-form";
+import LoginForm from "./components/login-form";
 import { Separator } from "@/components/ui/separator";
 import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 

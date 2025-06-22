@@ -1,6 +1,14 @@
-use bcrypt::verify;
+use std::env;
 
-use crate::{database::Database, users::service::UserService};
+use bcrypt::verify;
+use chrono::Utc;
+use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
+
+use crate::{
+    auth::models::{AuthResponse, Claims},
+    database::Database,
+    users::service::UserService,
+};
 
 pub struct AuthService<'a> {
     database: &'a Database,
@@ -15,18 +23,51 @@ impl<'a> AuthService<'a> {
         }
     }
 
-    pub fn attempt_login(&self, username: String, password: String) -> Result<String, String> {
+    pub fn attempt_login(
+        &self,
+        username: String,
+        password: String,
+    ) -> Result<AuthResponse, String> {
         let user = self.user_service.get_user_by_username(&username);
 
         match user {
             Ok(user) => {
                 if verify(password, &user.password).unwrap() {
-                    Ok(String::from("User logged in successfully."))
+                    Ok(AuthResponse {
+                        token: self.create_jwt(&user.user_id).map_err(|e| e.to_string())?,
+                        user_id: user.user_id,
+                    })
                 } else {
-                    Err(String::from("Wrong credentials."))
+                    Err(String::from("Wrong credentials"))
                 }
             }
-            Err(_) => Err(String::from("User not found.")),
+            Err(_) => Err(String::from("User not found")),
         }
+    }
+
+    pub fn create_jwt(&self, user_id: &i64) -> Result<String, jsonwebtoken::errors::Error> {
+        let now = Utc::now().timestamp() as usize;
+        let expiration = now + (60 * 60 * 24);
+
+        let claims = Claims {
+            sub: user_id.to_owned(),
+            exp: expiration,
+            iat: now,
+        };
+
+        encode(
+            &Header::default(),
+            &claims,
+            &EncodingKey::from_secret(env::var("SECRET_KEY").unwrap().as_bytes()),
+        )
+    }
+
+    pub fn validate_jwt(&self, token: &str) -> Result<Claims, jsonwebtoken::errors::Error> {
+        decode::<Claims>(
+            token,
+            &DecodingKey::from_secret(env::var("SECRET_KEY").unwrap().as_bytes()),
+            &Validation::new(Algorithm::HS256),
+        )
+        .map(|data| data.claims)
     }
 }
