@@ -2,12 +2,12 @@ use rusqlite::{params, Result};
 
 use crate::database::Database;
 
-pub struct UserRepository {
-    database: Database,
+pub struct UserRepository<'a> {
+    database: &'a Database,
 }
 
-impl UserRepository {
-    pub fn new(database: Database) -> UserRepository {
+impl<'a> UserRepository<'a> {
+    pub fn new(database: &'a Database) -> UserRepository<'a> {
         UserRepository { database }
     }
 
@@ -22,7 +22,7 @@ impl UserRepository {
 
         conn.execute(
             "INSERT INTO users (name, email, username, password) VALUES (?, ?, ?, ?)",
-            params![name, email, username, password],
+            [name, email, username, password],
         )?;
 
         Ok(())
