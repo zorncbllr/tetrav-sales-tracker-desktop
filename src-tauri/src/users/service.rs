@@ -1,5 +1,5 @@
 use bcrypt::{hash, DEFAULT_COST};
-use rusqlite::Result;
+use rusqlite::{types::Value, Result};
 
 use crate::{
     database::Database,
@@ -20,8 +20,8 @@ impl<'a> UserService<'a> {
         }
     }
 
-    pub fn get_user_by_username(&self, username: &str) -> Result<User> {
-        self.user_repository.get_user_by_username(username)
+    pub fn get_user_where(&self, field: &str, value: Value) -> Result<User> {
+        self.user_repository.get_user_where(field, value)
     }
 
     pub fn create_user(

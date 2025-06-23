@@ -1,4 +1,4 @@
-use rusqlite::{params, Result};
+use rusqlite::{params, types::Value, Result};
 
 use crate::{database::Database, users::model::User};
 
@@ -11,12 +11,12 @@ impl<'a> UserRepository<'a> {
         UserRepository { database }
     }
 
-    pub fn get_user_by_username(&self, username: &str) -> Result<User> {
+    pub fn get_user_where(&self, field: &str, value: Value) -> Result<User> {
         let conn = self.database.connection.lock().unwrap();
 
         conn.query_row(
-            "SELECT * FROM users WHERE username = ?1",
-            [username],
+            &format!("SELECT * FROM users WHERE {} = ?", field),
+            params![value],
             |row| {
                 Ok(User {
                     user_id: row.get(0)?,

@@ -1,7 +1,10 @@
 import { invoke } from "@tauri-apps/api/core";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
 
 export const useAuth = () => {
+  const navigate = useNavigate();
+
   const login = async (username: string, password: string) => {
     try {
       const response = await invoke<{ token: string; user_id: string }>(
@@ -33,6 +36,7 @@ export const useAuth = () => {
 
   const logout = () => {
     Cookies.remove("auth_token");
+    navigate("/auth/login");
   };
 
   return { login, verifyToken, logout };

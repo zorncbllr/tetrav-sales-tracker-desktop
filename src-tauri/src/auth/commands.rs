@@ -21,9 +21,10 @@ pub fn attempt_login(
 
 #[tauri::command]
 pub fn verify_token(database: State<Database>, token: String) -> Result<i64, String> {
-    let claims = AuthService::new(&database)
-        .validate_jwt(&token)
-        .map_err(|e| e.to_string())?;
+    let claims = AuthService::new(&database).validate_jwt(&token);
 
-    Ok(claims.sub)
+    match claims {
+        Ok(claims) => Ok(claims.sub),
+        Err(error) => Err(error.to_string()),
+    }
 }

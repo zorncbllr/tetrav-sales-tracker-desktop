@@ -2,7 +2,10 @@ use std::env;
 
 use bcrypt::verify;
 use chrono::Utc;
-use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
+use jsonwebtoken::{
+    decode, encode, errors::ErrorKind, Algorithm, DecodingKey, EncodingKey, Header, Validation,
+};
+use rusqlite::types::Value;
 
 use crate::{
     auth::models::{AuthResponse, Claims},
@@ -28,7 +31,9 @@ impl<'a> AuthService<'a> {
         username: String,
         password: String,
     ) -> Result<AuthResponse, String> {
-        let user = self.user_service.get_user_by_username(&username);
+        let user = self
+            .user_service
+            .get_user_where("username", Value::Text(username));
 
         match user {
             Ok(user) => {
@@ -63,11 +68,21 @@ impl<'a> AuthService<'a> {
     }
 
     pub fn validate_jwt(&self, token: &str) -> Result<Claims, jsonwebtoken::errors::Error> {
-        decode::<Claims>(
+        let claims = decode::<Claims>(
             token,
             &DecodingKey::from_secret(env::var("SECRET_KEY").unwrap().as_bytes()),
             &Validation::new(Algorithm::HS256),
         )
-        .map(|data| data.claims)
+        .map(|data| data.claims)?;
+
+        let user = self
+            .user_service
+            .get_user_where("user_id", Value::Integer(claims.sub));
+
+        if let Ok(_) = user {
+            Ok(claims)
+        } else {
+            Err(jsonwebtoken::errors::Error::from(ErrorKind::InvalidSubject))
+        }
     }
 }
