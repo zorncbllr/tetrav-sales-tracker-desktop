@@ -28,8 +28,7 @@ function LoginForm() {
 
   const { login } = useAuth();
 
-  const onSubmit = async (data: LoginData) =>
-    login(data.username, data.password);
+  const onSubmit = async (data: LoginData) => login(data);
 
   return (
     <Form {...form}>

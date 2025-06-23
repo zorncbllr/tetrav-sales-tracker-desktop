@@ -1,28 +1,37 @@
 import { invoke } from "@tauri-apps/api/core";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
+import { LoginData, LoginResponse } from "../types";
+import { useAuthStore } from "../store";
 
 export const useAuth = () => {
   const navigate = useNavigate();
+  const { setToken, token } = useAuthStore();
 
-  const login = async (username: string, password: string) => {
+  const login = async ({ username, password, remember_me }: LoginData) => {
+    console.log(username);
+
     try {
-      const response = await invoke<{ token: string; user_id: string }>(
-        "login",
-        {
-          credentials: { username, password },
-        }
-      );
+      const response = await invoke<LoginResponse>("attempt_login", {
+        username,
+        password,
+      });
 
-      Cookies.set("auth_token", response.token, { expires: 1 }); // 1 day expiry
+      if (remember_me) {
+        Cookies.set("auth_token", response.token, { expires: 7 });
+      }
+
+      setToken(response.token);
+      navigate("/");
       return { success: true, user: response.user_id };
     } catch (error) {
+      console.log(error);
       return { success: false, error: error as string };
     }
   };
 
   const verifyToken = async () => {
-    const token = Cookies.get("auth_token");
+    console.log("token: " + token);
     if (!token) return { valid: false };
 
     try {
@@ -36,6 +45,7 @@ export const useAuth = () => {
 
   const logout = () => {
     Cookies.remove("auth_token");
+    setToken(undefined);
     navigate("/auth/login");
   };
 

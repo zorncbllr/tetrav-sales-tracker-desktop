@@ -52,7 +52,7 @@ impl<'a> AuthService<'a> {
 
     pub fn create_jwt(&self, user_id: &i64) -> Result<String, jsonwebtoken::errors::Error> {
         let now = Utc::now().timestamp() as usize;
-        let expiration = now + (60 * 60 * 24);
+        let expiration = now + (60 * 60 * 24 * 7);
 
         let claims = Claims {
             sub: user_id.to_owned(),
