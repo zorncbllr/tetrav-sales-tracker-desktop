@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginData, loginSchema } from "../../types";
@@ -19,6 +19,8 @@ import { useAuth } from "../../hooks/auth-hook";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -29,21 +31,27 @@ function LoginForm() {
   const { login } = useAuth();
 
   const onSubmit = async (data: LoginData) => {
-    const { success, error } = await login(data);
+    setLoading(true);
 
-    if (!success) {
-      if (error?.username) {
-        form.setError("username", {
-          message: error.username,
-        });
+    setTimeout(async () => {
+      const { success, error } = await login(data);
+
+      if (!success) {
+        if (error?.username) {
+          form.setError("username", {
+            message: error.username,
+          });
+        }
+
+        if (error?.password) {
+          form.setError("password", {
+            message: error.password,
+          });
+        }
       }
 
-      if (error?.password) {
-        form.setError("password", {
-          message: error.password,
-        });
-      }
-    }
+      setLoading(false);
+    }, 1000);
   };
 
   return (
@@ -115,9 +123,13 @@ function LoginForm() {
           )}
         />
 
-        <Button type="submit" className="mt-2">
-          Login
-        </Button>
+        {loading ? (
+          <Button disabled>
+            Logging in <Loader className="animate-spin" />
+          </Button>
+        ) : (
+          <Button type="submit">Login</Button>
+        )}
       </form>
     </Form>
   );
