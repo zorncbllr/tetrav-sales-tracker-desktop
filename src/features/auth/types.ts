@@ -12,3 +12,8 @@ export interface LoginResponse {
   token: string;
   user_id: number;
 }
+
+export interface AuthError {
+  username?: string;
+  password?: string;
+}

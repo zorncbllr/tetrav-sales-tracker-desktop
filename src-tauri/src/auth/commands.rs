@@ -1,7 +1,10 @@
 use tauri::State;
 
 use crate::{
-    auth::{models::AuthResponse, service::AuthService},
+    auth::{
+        models::{AuthError, AuthResponse},
+        service::AuthService,
+    },
     database::Database,
 };
 
@@ -10,7 +13,7 @@ pub fn attempt_login(
     database: State<Database>,
     username: String,
     password: String,
-) -> Result<AuthResponse, String> {
+) -> Result<AuthResponse, AuthError> {
     let auth_response = AuthService::new(&database).attempt_login(username, password)?;
 
     Ok(auth_response)

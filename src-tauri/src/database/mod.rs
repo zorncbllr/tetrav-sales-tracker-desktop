@@ -29,7 +29,7 @@ impl Database {
         let user_service = UserService::new(&self);
 
         user_service
-            .create_user("root", "root@gmail.com", "root", "root")
+            .create_user("Admin", "admin@gmail.com", "admin", "admin")
             .unwrap_or(());
 
         Ok(())

@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
-import { LoginData, LoginResponse } from "../types";
+import { AuthError, LoginData, LoginResponse } from "../types";
 import { useAuthStore } from "../store";
 
 export const useAuth = () => {
@@ -25,8 +25,7 @@ export const useAuth = () => {
       navigate("/");
       return { success: true, user: response.user_id };
     } catch (error) {
-      console.log(error);
-      return { success: false, error: error as string };
+      return { success: false, error: error as AuthError };
     }
   };
 

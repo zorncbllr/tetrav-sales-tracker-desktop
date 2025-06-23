@@ -8,7 +8,7 @@ use jsonwebtoken::{
 use rusqlite::types::Value;
 
 use crate::{
-    auth::models::{AuthResponse, Claims},
+    auth::models::{AuthError, AuthResponse, Claims},
     database::Database,
     users::service::UserService,
 };
@@ -30,7 +30,7 @@ impl<'a> AuthService<'a> {
         &self,
         username: String,
         password: String,
-    ) -> Result<AuthResponse, String> {
+    ) -> Result<AuthResponse, AuthError> {
         let user = self
             .user_service
             .get_user_where("username", Value::Text(username));
@@ -39,14 +39,20 @@ impl<'a> AuthService<'a> {
             Ok(user) => {
                 if verify(password, &user.password).unwrap() {
                     Ok(AuthResponse {
-                        token: self.create_jwt(&user.user_id).map_err(|e| e.to_string())?,
+                        token: self.create_jwt(&user.user_id).unwrap(),
                         user_id: user.user_id,
                     })
                 } else {
-                    Err(String::from("Wrong credentials"))
+                    Err(AuthError {
+                        username: None,
+                        password: Some(String::from("Wrong credentials.")),
+                    })
                 }
             }
-            Err(_) => Err(String::from("User not found")),
+            Err(_) => Err(AuthError {
+                username: Some(String::from("User not found.")),
+                password: None,
+            }),
         }
     }
 

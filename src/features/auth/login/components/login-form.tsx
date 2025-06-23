@@ -28,7 +28,23 @@ function LoginForm() {
 
   const { login } = useAuth();
 
-  const onSubmit = async (data: LoginData) => login(data);
+  const onSubmit = async (data: LoginData) => {
+    const { success, error } = await login(data);
+
+    if (!success) {
+      if (error?.username) {
+        form.setError("username", {
+          message: error.username,
+        });
+      }
+
+      if (error?.password) {
+        form.setError("password", {
+          message: error.password,
+        });
+      }
+    }
+  };
 
   return (
     <Form {...form}>
