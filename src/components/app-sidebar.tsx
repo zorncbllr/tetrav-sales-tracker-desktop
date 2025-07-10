@@ -1,9 +1,9 @@
+"use client";
+
 import * as React from "react";
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
-  Command,
   Frame,
   GalleryVerticalEnd,
   Map,
@@ -44,7 +44,20 @@ const data = {
       url: "#",
       icon: SquareTerminal,
       isActive: true,
-      items: [],
+      items: [
+        {
+          title: "Genesis",
+          url: "#",
+        },
+        {
+          title: "Explorer",
+          url: "#",
+        },
+        {
+          title: "Quantum",
+          url: "#",
+        },
+      ],
     },
     {
       title: "Models",
