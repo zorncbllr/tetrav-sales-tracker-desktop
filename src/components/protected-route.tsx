@@ -17,6 +17,7 @@ export default function ProtectedRoute({
       if (!valid) navigate("/auth/login");
       else setIsVerified(true);
     };
+
     checkAuth();
   }, [navigate, verifyToken]);
 

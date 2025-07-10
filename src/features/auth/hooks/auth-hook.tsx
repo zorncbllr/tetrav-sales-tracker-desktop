@@ -45,7 +45,7 @@ export const useAuth = () => {
   const logout = () => {
     Cookies.remove("auth_token");
     setToken(undefined);
-    navigate("/auth/login");
+    navigate("/");
   };
 
   return { login, verifyToken, logout };
