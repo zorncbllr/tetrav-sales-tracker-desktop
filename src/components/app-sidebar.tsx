@@ -4,9 +4,15 @@ import * as React from "react";
 import {
   BookOpen,
   Bot,
+  ChartColumnBig,
+  DollarSignIcon,
   Frame,
+  FuelIcon,
   GalleryVerticalEnd,
+  LayoutDashboard,
+  LucideSquareSplitVertical,
   Map,
+  PenSquareIcon,
   PieChart,
   Settings2,
   SquareTerminal,
@@ -42,47 +48,64 @@ const data = {
     {
       title: "Dashboard",
       url: "#",
-      icon: SquareTerminal,
+      icon: LayoutDashboard,
       isActive: true,
     },
     {
-      title: "Models",
+      title: "Stock Levels",
       url: "#",
-      icon: Bot,
+      icon: ChartColumnBig,
+      isActive: true,
+    },
+    {
+      title: "Readings",
+      url: "#",
+      icon: FuelIcon,
+      isActive: true,
+    },
+    {
+      title: "Vales",
+      url: "#",
+      icon: PenSquareIcon,
+      isActive: true,
+    },
+    {
+      title: "Accounts",
+      url: "#",
+      icon: ChartColumnBig,
+      isActive: true,
       items: [
         {
-          title: "Genesis",
+          title: "Individuals",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "Offices",
           url: "#",
         },
         {
-          title: "Quantum",
+          title: "Stations",
           url: "#",
         },
       ],
     },
+
     {
-      title: "Documentation",
+      title: "Sales",
       url: "#",
-      icon: BookOpen,
+      icon: DollarSignIcon,
+      isActive: true,
       items: [
         {
-          title: "Introduction",
+          title: "Daily Sales",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Monthly Sales",
           url: "#",
         },
         {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "Annual Sales",
           url: "#",
         },
       ],
