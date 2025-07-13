@@ -47,7 +47,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/",
       icon: LayoutDashboard,
       isActive: true,
     },
@@ -71,23 +71,9 @@ const data = {
     },
     {
       title: "Accounts",
-      url: "#",
+      url: "/accounts",
       icon: ChartColumnBig,
       isActive: true,
-      items: [
-        {
-          title: "Individuals",
-          url: "#",
-        },
-        {
-          title: "Offices",
-          url: "#",
-        },
-        {
-          title: "Stations",
-          url: "#",
-        },
-      ],
     },
 
     {
@@ -95,20 +81,6 @@ const data = {
       url: "#",
       icon: DollarSignIcon,
       isActive: true,
-      items: [
-        {
-          title: "Daily Sales",
-          url: "#",
-        },
-        {
-          title: "Monthly Sales",
-          url: "#",
-        },
-        {
-          title: "Annual Sales",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Settings",
