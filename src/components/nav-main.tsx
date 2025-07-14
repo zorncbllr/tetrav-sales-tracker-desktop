@@ -17,7 +17,10 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
+import { cn } from "@/lib/utils";
+import { SidebarItem, useSidebarStore } from "@/stores/sidebar.store";
+import { useLayoutEffect } from "react";
 
 export function NavMain({
   items,
@@ -33,6 +36,16 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const { activeItem, setActiveItem, activeSubItem, setActiveSubItem } =
+    useSidebarStore();
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    if (pathname == "/") {
+      setActiveItem(items.find((item) => item.url == pathname) as SidebarItem);
+    }
+  }, []);
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -47,7 +60,10 @@ export function NavMain({
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip={item.title}>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    className={cn(item == activeItem && "bg-secondary")}
+                  >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -57,7 +73,16 @@ export function NavMain({
                   <SidebarMenuSub>
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
-                        <SidebarMenuSubButton asChild>
+                        <SidebarMenuSubButton
+                          asChild
+                          onClick={() => {
+                            setActiveItem(item);
+                            setActiveSubItem(subItem);
+                          }}
+                          className={cn(
+                            subItem == activeSubItem && "bg-secondary"
+                          )}
+                        >
                           <Link to={subItem.url}>
                             <span>{subItem.title}</span>
                           </Link>
@@ -69,9 +94,17 @@ export function NavMain({
               </SidebarMenuItem>
             </Collapsible>
           ) : (
-            <SidebarMenuItem>
+            <SidebarMenuItem
+              onClick={() => {
+                setActiveSubItem(undefined);
+                setActiveItem(item);
+              }}
+            >
               <Link to={item.url}>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  className={cn(item == activeItem && "bg-secondary")}
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </SidebarMenuButton>
