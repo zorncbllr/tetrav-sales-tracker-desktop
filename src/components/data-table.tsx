@@ -13,7 +13,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,14 +31,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<T> {
   data: T[];
   columns: ColumnDef<T>[];
+  filter: string;
   actions?: React.ReactNode[];
 }
 
-export function DataTable<T>({ data, columns, actions }: DataTableProps<T>) {
+export function DataTable<T>({
+  data,
+  columns,
+  actions,
+  filter,
+}: DataTableProps<T>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -66,17 +73,29 @@ export function DataTable<T>({ data, columns, actions }: DataTableProps<T>) {
     },
   });
 
+  const [isFocus, setIsFocus] = React.useState<boolean>(false);
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4 justify-between">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div
+          className={cn(
+            "border rounded-md py-1.5 px-3 w-[25rem] flex gap-3 items-center",
+            isFocus && "border-primary"
+          )}
+        >
+          <Search size={18} />
+          <input
+            placeholder="Search"
+            value={(table.getColumn(filter)?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn(filter)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm focus:outline-none w-full"
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+          />
+        </div>
 
         <div className="flex gap-2">
           {actions?.map((action) => action)}
