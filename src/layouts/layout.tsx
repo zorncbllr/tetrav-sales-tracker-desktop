@@ -53,7 +53,9 @@ function Layout({ children }: { children: JSX.Element }) {
           </div>
         </header>
 
-        <div className="p-4">{children}</div>
+        <Separator />
+
+        <div className="p-8">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
