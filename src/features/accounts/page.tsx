@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Account } from "./types";
 import { useFetchAccounts } from "./api/queries";
+import AddAccountButton from "./components/add-button";
 
 export const columns: ColumnDef<Account>[] = [
   {
@@ -122,11 +123,7 @@ function AccountsPage() {
             filter="account_name"
             columns={columns}
             data={data}
-            actions={[
-              <Button variant={"outline"}>
-                <Plus /> Add Account
-              </Button>,
-            ]}
+            actions={[<AddAccountButton />]}
           />
         )}
       </div>
