@@ -2,7 +2,7 @@ import useBreadCrumb from "@/hooks/use-breadcrumb";
 import Layout from "@/layouts/layout";
 
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal, Plus, UserSearch } from "lucide-react";
+import { MoreHorizontal, Plus, UserSearch } from "lucide-react";
 import AccountTabs from "./components/tabs";
 import { DataTable } from "@/components/data-table";
 import { Separator } from "@/components/ui/separator";

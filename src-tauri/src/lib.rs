@@ -35,7 +35,8 @@ pub fn run() {
             greet,
             auth::commands::attempt_login,
             auth::commands::verify_token,
-            accounts::commands::get_accounts
+            accounts::commands::get_accounts,
+            accounts::commands::add_account
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,9 +1,6 @@
-use rusqlite::Result;
+use rusqlite::{params, Result};
 
-use crate::{
-    accounts::model::{Account, AccountType},
-    database::Database,
-};
+use crate::{accounts::model::Account, database::Database};
 
 pub struct AccountRepository<'a> {
     database: &'a Database,
@@ -24,11 +21,22 @@ impl<'a> AccountRepository<'a> {
                 Ok(Account {
                     account_id: row.get(0)?,
                     account_name: row.get(1)?,
-                    account_type: AccountType::Individual,
+                    account_type: row.get(2)?,
                 })
             })?
             .collect::<Result<Vec<Account>>>()?;
 
         Ok(accounts)
+    }
+
+    pub fn add_account(&self, account_name: &str, account_type: &str) -> Result<()> {
+        let conn = self.database.connection.lock().unwrap();
+
+        conn.execute(
+            "INSERT INTO accounts (account_name, account_type) VALUES (?, ?)",
+            params![account_name, account_type],
+        )?;
+
+        Ok(())
     }
 }

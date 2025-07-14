@@ -8,18 +8,25 @@ use crate::{
 #[allow(dead_code)]
 pub struct AccountService<'a> {
     database: &'a Database,
-    user_repository: AccountRepository<'a>,
+    account_repository: AccountRepository<'a>,
 }
 
 impl<'a> AccountService<'a> {
     pub fn new(database: &'a Database) -> AccountService<'a> {
         AccountService {
             database: database,
-            user_repository: AccountRepository::new(database),
+            account_repository: AccountRepository::new(database),
         }
     }
 
     pub fn get_accounts(&self) -> Result<Vec<Account>> {
-        self.user_repository.get_accounts()
+        self.account_repository.get_accounts()
+    }
+
+    pub fn add_account(&self, account_name: String, account_type: String) -> Result<()> {
+        self.account_repository
+            .add_account(account_name.as_str(), account_type.as_str())?;
+
+        Ok(())
     }
 }
