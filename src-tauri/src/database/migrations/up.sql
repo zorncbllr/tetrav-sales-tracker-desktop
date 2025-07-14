@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS fuel_prices (
 CREATE TABLE IF NOT EXISTS accounts (
     account_id     INTEGER PRIMARY KEY AUTOINCREMENT,
     account_name   TEXT NOT NULL UNIQUE,
-    account_type   TEXT NOT NULL CHECK (account_type IN ('station', 'office', 'individual'))
+    account_type   TEXT NOT NULL CHECK (account_type IN ('Station', 'Office', 'Individual'))
 );
 
 CREATE TABLE IF NOT EXISTS individuals (

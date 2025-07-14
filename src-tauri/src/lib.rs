@@ -5,11 +5,10 @@ use tauri::Manager;
 
 use crate::database::Database;
 
+mod accounts;
 mod auth;
 mod database;
 mod users;
-
-use auth::auth_commands;
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -34,8 +33,9 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             greet,
-            auth_commands::attempt_login,
-            auth_commands::verify_token
+            auth::commands::attempt_login,
+            auth::commands::verify_token,
+            accounts::commands::get_accounts
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

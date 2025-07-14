@@ -1,3 +1,4 @@
+pub mod commands;
 pub mod model;
 mod repository;
-pub mod service;
+mod service;
