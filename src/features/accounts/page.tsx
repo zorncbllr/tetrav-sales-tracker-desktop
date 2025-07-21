@@ -2,21 +2,13 @@ import useBreadCrumb from "@/hooks/use-breadcrumb";
 import Layout from "@/layouts/layout";
 
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Plus, UserSearch } from "lucide-react";
+import { UserSearch } from "lucide-react";
 import AccountTabs from "./components/tabs";
 import { DataTable } from "@/components/data-table";
 import { Separator } from "@/components/ui/separator";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Account } from "./types";
 import { useFetchAccounts } from "./api/queries";
 import AddAccountButton from "./components/add-button";
@@ -56,32 +48,14 @@ export const columns: ColumnDef<Account>[] = [
   },
   {
     id: "actions",
-    enableHiding: false,
     cell: ({ row }) => {
       const account = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="dark">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(account.account_id.toString())
-              }
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex justify-end gap-2">
+          <Button>Edit</Button>
+          <Button variant={"outline"}>Remove</Button>
+        </div>
       );
     },
   },
