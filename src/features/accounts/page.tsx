@@ -12,6 +12,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Account } from "./types";
 import { useFetchAccounts } from "./api/queries";
 import AddAccountButton from "./components/add-button";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { useAccountStore } from "./store";
 
 export const columns: ColumnDef<Account>[] = [
   {
@@ -37,14 +40,38 @@ export const columns: ColumnDef<Account>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "account_id",
+    header: "ID",
+    cell: ({ row }) => (
+      <div className="w-fit">{row.getValue("account_id")}</div>
+    ),
+  },
+  {
     accessorKey: "account_name",
-    header: "Account Name",
-    cell: ({ row }) => <div>{row.getValue("account_name")}</div>,
+    header: () => <h1 className="w-full flex justify-center">Account Name</h1>,
+    cell: ({ row }) => (
+      <div className="w-full flex justify-center">
+        {row.getValue("account_name")}
+      </div>
+    ),
   },
   {
     accessorKey: "account_type",
-    header: "Type",
-    cell: ({ row }) => <div>{row.getValue("account_type")}</div>,
+    header: () => <h1 className="flex justify-center">Type</h1>,
+    cell: ({ row }) => (
+      <div className="flex justify-center">
+        <Badge
+          className={cn(
+            "text-white backdrop-blur-sm",
+            row.original.account_type == "Individual"
+              ? "bg-blue-500/20 border border-blue-400/10 shadow-sm shadow-blue-500/5 hover:bg-blue-500/30 transition-all"
+              : "bg-green-500/20 border border-green-400/10 shadow-sm shadow-green-500/5 hover:bg-green-500/30 transition-all"
+          )}
+        >
+          {row.getValue("account_type")}
+        </Badge>
+      </div>
+    ),
   },
   {
     id: "actions",
@@ -71,6 +98,21 @@ function AccountsPage() {
   ]);
 
   const { data } = useFetchAccounts();
+  const { activeTab } = useAccountStore();
+
+  function getActiveTabData(
+    activeTab: "General" | "Individuals" | "Offices",
+    data: Account[]
+  ) {
+    if (activeTab == "Individuals") {
+      return data.filter((dt) => dt.account_type == "Individual");
+    }
+    if (activeTab == "Offices") {
+      return data.filter((dt) => dt.account_type == "Office");
+    }
+
+    return data;
+  }
 
   return (
     <Layout>
@@ -96,7 +138,7 @@ function AccountsPage() {
           <DataTable
             filter="account_name"
             columns={columns}
-            data={data}
+            data={getActiveTabData(activeTab, data)}
             actions={[<AddAccountButton />]}
           />
         )}

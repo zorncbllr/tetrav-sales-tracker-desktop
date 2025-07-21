@@ -16,7 +16,6 @@ import { accountSchema } from "../types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAddAccount } from "../api/mutations";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
   Select,
@@ -55,7 +54,7 @@ function AddAccountButton() {
           <Plus /> Add Account
         </Button>
       </DialogTrigger>
-      <DialogContent className="dark text-foreground">
+      <DialogContent className="dark text-foreground w-[28rem]">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit((data) => {
@@ -78,9 +77,9 @@ function AddAccountButton() {
                   </DialogDescription>
                 </div>
               </div>
-            </DialogHeader>
 
-            <Separator />
+              <Separator />
+            </DialogHeader>
 
             <div className="space-y-4 py-4">
               <FormField

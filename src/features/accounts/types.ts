@@ -3,7 +3,7 @@ import { z } from "zod";
 export interface Account {
   account_id: number;
   account_name: string;
-  account_type: "Offices" | "Individual" | "Station";
+  account_type: "Office" | "Individual" | "Station";
 }
 
 export const accountSchema = z.object({
