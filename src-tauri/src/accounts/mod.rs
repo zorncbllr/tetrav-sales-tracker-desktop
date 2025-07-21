@@ -1,4 +1,6 @@
 pub mod commands;
+pub mod individuals;
 pub mod model;
+pub mod offices;
 mod repository;
-mod service;
+pub mod stations;

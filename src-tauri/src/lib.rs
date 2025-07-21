@@ -8,7 +8,6 @@ use crate::database::Database;
 mod accounts;
 mod auth;
 mod database;
-mod stations;
 mod users;
 
 #[tauri::command]
@@ -37,7 +36,6 @@ pub fn run() {
             auth::commands::attempt_login,
             auth::commands::verify_token,
             accounts::commands::get_accounts,
-            accounts::commands::add_account
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
