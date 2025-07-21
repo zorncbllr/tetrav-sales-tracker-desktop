@@ -8,6 +8,7 @@ use crate::database::Database;
 mod accounts;
 mod auth;
 mod database;
+mod stations;
 mod users;
 
 #[tauri::command]
