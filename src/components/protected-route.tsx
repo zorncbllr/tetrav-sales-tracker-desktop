@@ -1,25 +1,14 @@
-import { useAuth } from "@/features/auth/hooks/auth-hook";
-import { useEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 import { useNavigate } from "react-router";
 
-export default function ProtectedRoute({
-  children,
-}: {
-  children: JSX.Element;
-}) {
-  const { verifyToken } = useAuth();
+function ProtectedRoute({ children }: { children: JSX.Element }) {
   const navigate = useNavigate();
-  const [isVerified, setIsVerified] = useState(false);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { valid } = await verifyToken();
-      if (!valid) navigate("/auth/login");
-      else setIsVerified(true);
-    };
+  useLayoutEffect(() => {
+    navigate("/auth");
+  }, []);
 
-    checkAuth();
-  }, [navigate, verifyToken]);
-
-  return isVerified ? children : null;
+  return children;
 }
+
+export default ProtectedRoute;

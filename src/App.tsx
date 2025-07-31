@@ -1,31 +1,28 @@
 import { Route, Routes } from "react-router";
-import LoginPage from "./features/auth/login/page";
-import Dashboard from "./features/dashboard/page";
+import { getRoutes } from "./routes/routes.conf";
 import ProtectedRoute from "./components/protected-route";
-import AccountsPage from "./features/accounts/page";
 
 function App() {
-  return (
-    <div className="dark bg-background text-foreground">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+  const routes = getRoutes();
 
-        <Route
-          path="/accounts"
-          element={
-            <ProtectedRoute>
-              <AccountsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/auth/login" element={<LoginPage />} />
+  return (
+    <div className="w-full h-screen dark bg-background text-foreground">
+      <Routes>
+        {routes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={
+              route.protected ? (
+                <ProtectedRoute>
+                  <route.page />
+                </ProtectedRoute>
+              ) : (
+                <route.page />
+              )
+            }
+          />
+        ))}
       </Routes>
     </div>
   );

@@ -23,6 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-#
-data/tetrav_station.db
 src-tauri/.env
+data/*
